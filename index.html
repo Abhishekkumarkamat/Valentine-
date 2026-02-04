@@ -1,145 +1,216 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Will You Be My Valentine?</title>
-  <style>
-    body {
-      background: linear-gradient(180deg, #ffe6f0 0%, #fff 100%);
-      font-family: 'Segoe UI', Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      margin: 0;
-    }
-    .container {
-      background: #fff;
-      border-radius: 24px;
-      box-shadow: 0 4px 24px rgba(255, 0, 128, 0.08);
-      padding: 2rem 2.5rem 2.5rem 2.5rem;
-      text-align: center;
-      max-width: 350px;
-      position: relative;
-    }
-    .hearts {
-      font-size: 2rem;
-      position: absolute;
-      top: -2rem;
-      left: 1rem;
-      animation: float 2s infinite alternate;
-    }
-    @keyframes float {
-      0% { transform: translateY(0); }
-      100% { transform: translateY(-10px); }
-    }
-    h1 {
-      color: #e75480;
-      margin-bottom: 0.5rem;
-      font-size: 1.7rem;
-    }
-    .question {
-      font-size: 1.2rem;
-      margin-bottom: 2rem;
-      color: #d6336c;
-    }
-    .btns {
-      display: flex;
-      justify-content: center;
-      gap: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Will You Be My Valentine?</title>
+
+<style>
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(180deg, #ffe6f0 0%, #fff 100%);
+    min-height: 100vh;
+  }
+
+  /* ===== CARD ===== */
+  .card {
+    background: #fff;
+    border-radius: 24px;
+    box-shadow: 0 4px 24px rgba(255, 0, 128, 0.08);
+    padding: 2rem 2.5rem 2.5rem;
+    text-align: center;
+    width: 360px;
+    max-width: 90%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+  }
+
+  .hearts {
+    font-size: 2rem;
+    position: absolute;
+    top: -1.8rem;
+    left: 1rem;
+    animation: float 2s infinite alternate;
+  }
+
+  @keyframes float {
+    from { transform: translateY(0); }
+    to { transform: translateY(-10px); }
+  }
+
+  h1 {
+    color: #e75480;
+    margin-bottom: 0.5rem;
+    font-size: 1.7rem;
+  }
+
+  .question {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+    color: #d6336c;
+  }
+
+  /* ===== BUTTON LAYER ===== */
+  .button-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  button {
+    padding: 0.7rem 2rem;
+    border-radius: 999px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    pointer-events: auto;
+    position: absolute;
+    transition: transform 0.15s linear, background 0.2s;
+  }
+
+  .yes {
+    background: #e75480;
+    color: #fff;
+    left: 50%;
+    top: calc(50% + 140px);
+    transform: translateX(-120%);
+    z-index: 3;
+  }
+
+  .yes:hover {
+    background: #c2185b;
+  }
+
+  .no {
+    background: #fff0f6;
+    color: #e75480;
+    border: 2px solid #e75480;
+    left: 50%;
+    top: calc(50% + 140px);
+    transform: translateX(20%);
+    z-index: 3;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .result {
+    margin-top: 1.5rem;
+    animation: fadeIn 0.7s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .gif {
+    margin-top: 1rem;
+    width: 100%;
+    max-width: 250px;
+    border-radius: 12px;
+  }
+
+  /* ===== MOBILE POLISH ===== */
+  @media (max-width: 480px) {
     button {
-      padding: 0.7rem 2rem;
-      border: none;
-      border-radius: 999px;
-      font-size: 1.1rem;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s, transform 0.2s;
-      font-weight: 600;
+      font-size: 1rem;
+      padding: 0.6rem 1.6rem;
     }
-    .yes {
-      background: #e75480;
-      color: #fff;
+
+    .card {
+      padding: 1.6rem;
     }
-    .yes:hover {
-      background: #c2185b;
-    }
-    .no {
-      background: #fff0f6;
-      color: #e75480;
-      border: 2px solid #e75480;
-      position: relative;
-    }
-    .no.moving {
-      position: absolute;
-      left: var(--move-x, 0px);
-      top: var(--move-y, 0px);
-      transition: left 0.2s, top 0.2s;
-    }
-    .hidden {
-      display: none;
-    }
-    .result {
-      margin-top: 1.5rem;
-      animation: fadeIn 0.7s;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .gif {
-      margin-top: 1rem;
-      border-radius: 12px;
-      width: 100%;
-      max-width: 250px;
-    }
-  </style>
+  }
+</style>
 </head>
+
 <body>
-  <div class="container">
-    <div class="hearts">💖💗</div>
-    <h1>Will you be my Valentine, Rahul? 🥰</h1>
-    <div class="question">Please say yes! 💌</div>
-    <div class="btns">
-      <button class="yes">Yes 😊</button>
-      <button class="no">No 😢</button>
-    </div>
-    <div class="result hidden">
-      <h2 style="color:#e75480;">It's a date then! 💖</h2>
-      <div style="color:#888; margin-bottom: 1rem;">Knew you'd say yes 😘</div>
-      <img class="gif" src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" alt="Celebration GIF">
-    </div>
+
+<!-- CARD -->
+<div class="card">
+  <div class="hearts">💖💗</div>
+  <h1>Will you be my Valentine, Rahul? 🥰</h1>
+  <div class="question">Please say yes! 💌</div>
+
+  <div class="result hidden">
+    <h2 style="color:#e75480;">It's a date then! 💖</h2>
+    <p style="color:#888;">Knew you'd say yes 😘</p>
+    <img class="gif"
+      src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif">
   </div>
-  <script>
-    const yesBtn = document.querySelector('.yes');
-    const noBtn = document.querySelector('.no');
-    const btns = document.querySelector('.btns');
-    const result = document.querySelector('.result');
-    let moveCount = 0;
-    
-    yesBtn.addEventListener('click', () => {
-      btns.classList.add('hidden');
-      result.classList.remove('hidden');
-    });
-    
-    noBtn.addEventListener('mouseover', () => {
-      moveCount++;
-      noBtn.classList.add('moving');
-      // Move to a random position within the container
-      const x = Math.floor(Math.random() * 120) - 60;
-      const y = Math.floor(Math.random() * 60) - 30;
-      noBtn.style.setProperty('--move-x', `${x}px`);
-      noBtn.style.setProperty('--move-y', `${y}px`);
-      if (moveCount > 5) {
-        noBtn.innerText = 'Please? 💖';
-      }
-    });
-    noBtn.addEventListener('mouseleave', () => {
-      noBtn.classList.remove('moving');
-    });
-  </script>
+</div>
+
+<!-- BUTTONS -->
+<div class="button-layer">
+  <button class="yes">Yes 😊</button>
+  <button class="no">No 😢</button>
+</div>
+
+<script>
+  const yesBtn = document.querySelector('.yes');
+  const noBtn = document.querySelector('.no');
+  const card = document.querySelector('.card');
+  const result = document.querySelector('.result');
+
+  let moveCount = 0;
+
+  function isOverlappingCard(x, y) {
+    const cardRect = card.getBoundingClientRect();
+    const btnRect = noBtn.getBoundingClientRect();
+
+    return !(
+      x + btnRect.width < cardRect.left ||
+      x > cardRect.right ||
+      y + btnRect.height < cardRect.top ||
+      y > cardRect.bottom
+    );
+  }
+
+  function moveNoButton() {
+    moveCount++;
+
+    const btnRect = noBtn.getBoundingClientRect();
+    const maxX = window.innerWidth - btnRect.width - 10;
+    const maxY = window.innerHeight - btnRect.height - 10;
+
+    let x, y;
+    do {
+      x = Math.random() * maxX;
+      y = Math.random() * maxY;
+    } while (isOverlappingCard(x, y));
+
+    noBtn.style.left = `${x}px`;
+    noBtn.style.top = `${y}px`;
+    noBtn.style.transform = 'none';
+
+    if (moveCount > 4) {
+      noBtn.textContent = 'Please? 💖';
+    }
+  }
+
+  // Desktop
+  noBtn.addEventListener('mouseenter', moveNoButton);
+
+  // Mobile
+  noBtn.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    moveNoButton();
+  });
+
+  yesBtn.addEventListener('click', () => {
+    yesBtn.classList.add('hidden');
+    noBtn.classList.add('hidden');
+    result.classList.remove('hidden');
+  });
+</script>
+
 </body>
 </html>
